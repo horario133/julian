@@ -227,6 +227,7 @@
         </div>
         <div class="tareas-list">
             <h3>Lista de Tareas</h3>
+            <p id="contadorTareas"><b>Tareas: 0 | Pendientes: 0 | Completadas: 0</b></p>
             <ul id="tareas"></ul>
         </div>
     </div>
@@ -241,8 +242,21 @@
             tareas = await resp.json();
             const lista = document.getElementById("tareas");
             lista.innerHTML = "";
+            let total = 0;
+            let pendientes = 0;
+            let completadas = 0;
 
             tareas.forEach((t, i) => {
+
+              if (!t.texto) return;
+
+              total++;
+              if (t.estado == "completada") {
+              completadas++;
+              } else {
+              pendientes++;
+           }
+
                 if (!t.texto) return;
                 if (filtro == "TODAS" || t.materia == filtro) {
                     const li = document.createElement("li");
@@ -272,6 +286,10 @@
                     lista.appendChild(li);
                 }
             });
+
+         document.getElementById("contadorTareas").innerHTML =
+         "<b>Tareas: "+total+" | Pendientes: "+pendientes+" | Completadas: "+completadas+"</b>";
+
         }
 
         function filtrar() {
